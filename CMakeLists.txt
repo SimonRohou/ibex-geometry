@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ibex-geometry)
 set(PACKAGE_VERSION "1.0.dev0")
 
+  set(CMAKE_CXX_STANDARD 11)
+  
 # build type
 IF(NOT CMAKE_BUILD_TYPE)
 	#SET(CMAKE_BUILD_TYPE "Release")
@@ -13,7 +15,7 @@ ENDIF()
 
 # option declaration
 option(BUILD_TESTS "Build tests" ON)
-option(WITH_PYTHON "Build python module" ON)
+option(WITH_PYTHON "Build python module" OFF)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
@@ -38,8 +40,6 @@ set(HEADERS_DIR ${CMAKE_CURRENT_BINARY_DIR}/include)
 file(MAKE_DIRECTORY ${HEADERS_DIR})
 include_directories(${HEADERS_DIR})
 add_subdirectory(src)
-
-
 
 
 if (BUILD_TESTS)

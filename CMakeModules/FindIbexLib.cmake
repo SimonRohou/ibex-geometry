@@ -13,29 +13,82 @@ if(IbexLib_USE_STATIC)
   SET(CMAKE_FIND_LIBRARY_SUFFIXES .a)
 endif()
 
+#set(IBEX_DEFINITIONS ${PC_IBEX_CFLAGS_OTHER})
+#find_path(IBEX_INCLUDE_DIR ibex.h
+#          HINTS ${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${IBEX_ROOT}
+#          PATH_SUFFIXES include include/ibex )
+#
+#find_path(FILIB_INCLUDE_DIR ieee/primitive.hpp
+#          HINTS ${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${IBEX_ROOT}
+#          PATH_SUFFIXES include
+#          )
+#
+#
+#find_library(IBEX_LIBRARY NAMES ibex
+#            HINTS ${PC_IBEX_LIBDIR} ${PC_IBEX_LIBRARY_DIRS}  ${IBEX_ROOT}
+#            PATH_SUFFIXES lib
+#						)
+#
+#find_library(FILIB_LIBRARY NAMES prim
+#            HINTS ${PC_IBEX_LIBDIR} ${PC_IBEX_LIBRARY_DIRS}  ${IBEX_ROOT}
+#            PATH_SUFFIXES lib
+#						)
+
+
+
+
+
+## INCLUDE DIRS
+
 set(IBEX_DEFINITIONS ${PC_IBEX_CFLAGS_OTHER})
 find_path(IBEX_INCLUDE_DIR ibex.h
           HINTS ${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${IBEX_ROOT}
           PATH_SUFFIXES include include/ibex )
 
-find_path(FILIB_INCLUDE_DIR ieee/primitive.hpp
-          HINTS ${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${IBEX_ROOT}
-          PATH_SUFFIXES include
+find_path(GAOL_INCLUDE_DIR gaol/gaol.h
+          PATH_SUFFIXES ibex/3rd
           )
 
+# Filib:
+# find_path(FILIB_INCLUDE_DIR ieee/primitive.hpp
+#           HINTS ${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${IBEX_ROOT}
+#           PATH_SUFFIXES include          
+#           )
+
+
+# LIBRARY DIRS
 
 find_library(IBEX_LIBRARY NAMES ibex
             HINTS ${PC_IBEX_LIBDIR} ${PC_IBEX_LIBRARY_DIRS}  ${IBEX_ROOT}
             PATH_SUFFIXES lib
-						)
+            )
 
-find_library(FILIB_LIBRARY NAMES prim
-            HINTS ${PC_IBEX_LIBDIR} ${PC_IBEX_LIBRARY_DIRS}  ${IBEX_ROOT}
-            PATH_SUFFIXES lib
-						)
+find_library(GAOL_LIBRARY NAMES gaol gdtoa ultim
+            HINTS ${IBEX_ROOT}
+            PATH_SUFFIXES lib/ibex/3rd)
 
-set(IBEX_LIBRARIES ${IBEX_LIBRARY} ${FILIB_LIBRARY})
-set(IBEX_INCLUDE_DIRS ${IBEX_INCLUDE_DIR} ${FILIB_INCLUDE_DIR})
+find_library(GAOL_GDTOA_LIBRARY NAMES gdtoa
+            HINTS ${IBEX_ROOT}
+            PATH_SUFFIXES lib/ibex/3rd)
+
+find_library(GAOL_ULTIM_LIBRARY NAMES ultim
+            HINTS ${IBEX_ROOT}
+            PATH_SUFFIXES lib/ibex/3rd)
+
+# Filib:
+# find_library(FILIB_LIBRARY NAMES prim
+#             HINTS ${PC_IBEX_LIBDIR} ${PC_IBEX_LIBRARY_DIRS}  ${IBEX_ROOT}
+#             PATH_SUFFIXES lib
+#             )
+
+
+
+message("IBEX_INCLUDE_DIR: " ${IBEX_INCLUDE_DIR})
+
+
+
+set(IBEX_LIBRARIES ${IBEX_LIBRARY} ${GAOL_LIBRARY} ${GAOL_GDTOA_LIBRARY} ${GAOL_ULTIM_LIBRARY})
+set(IBEX_INCLUDE_DIRS ${IBEX_INCLUDE_DIR} ${IBEX_INCLUDE_DIR}/ibex ${GAOL_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set IBEX_FOUND to TRUE
@@ -44,3 +97,5 @@ find_package_handle_standard_args(IBEX  DEFAULT_MSG
                                   IBEX_LIBRARY IBEX_INCLUDE_DIR)
 
 mark_as_advanced(IBEX_INCLUDE_DIR IBEX_LIBRARY )
+
+message("IBEX_LIBRARIES: " ${GAOL_LIBRARIES})
