@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0)
+set(CMAKE_CXX_COMPILER g++-5)
+set(CMAKE_CXX_STANDARD 11)
 
 project(ibex-geometry)
 set(PACKAGE_VERSION "1.0.dev0")
@@ -12,8 +14,8 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF()
 
 # option declaration
-option(BUILD_TESTS "Build tests" ON)
-option(WITH_PYTHON "Build python module" ON)
+option(BUILD_TESTS "Build tests" OFF)
+option(WITH_PYTHON "Build python module" OFF)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
@@ -24,15 +26,22 @@ if(NOT WIN32)
 	set(IbexLib_USE_STATIC 1)
 endif()
 
-FIND_PACKAGE(IbexLib)
-if(IBEX_FOUND)
-  INCLUDE_DIRECTORIES(${IBEX_INCLUDE_DIRS})
-  SET(LIBS ${LIBS} ${IBEX_LIBRARIES} )
-else()
-  MESSAGE(WARNING "Unable to find IbexLib. Maybe you need to set IBEX_ROOT ${IBEX_ROOT}")
-  MESSAGE(WARNING "If ibex is not installer run : \n\t sh travis_script/install_ibexlib.sh /path/to/your/install/dir")
-  #MESSAGE(FATAL_ERROR "where ")
-endif()
+#FIND_PACKAGE(IbexLib)
+#if(IBEX_FOUND)
+#  INCLUDE_DIRECTORIES(${IBEX_INCLUDE_DIRS})
+#  SET(LIBS ${LIBS} ${IBEX_LIBRARIES} )
+#else()
+#  MESSAGE(WARNING "Unable to find IbexLib. Maybe you need to set IBEX_ROOT ${IBEX_ROOT}")
+#  MESSAGE(WARNING "If ibex is not installer run : \n\t sh travis_script/install_ibexlib.sh /path/to/your/install/dir")
+#  #MESSAGE(FATAL_ERROR "where ")
+#endif()
+
+
+get_filename_component(TUBEX_ROOT "~/tubex-lib/" ABSOLUTE) # used for find_packages modules
+list(APPEND CMAKE_MODULE_PATH "${TUBEX_ROOT}/cmake/modules") # location of find_package modules
+find_package(TubexLib REQUIRED)
+find_package(IbexLib REQUIRED)
+include_directories("${TUBEX_INCLUDE_DIR}" "${IBEX_INCLUDE_DIR}" "/usr/local/include/ibex/" "/usr/local/include/ibex/3rd/")
 
 set(HEADERS_DIR ${CMAKE_CURRENT_BINARY_DIR}/include)
 file(MAKE_DIRECTORY ${HEADERS_DIR})
